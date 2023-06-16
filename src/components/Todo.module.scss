@@ -1,0 +1,43 @@
+.todo_app {
+	width: 100%;
+	max-width: 600px;
+	background: #fff;
+	margin: 100px auto 20px;
+	padding: 40px 30px 70px;
+	border-radius: 10px;
+
+	h1 {
+		color: #403f80;
+		margin-bottom: 40px;
+	}
+	ul {
+		list-style-type: none;
+		padding: 0;
+		li {
+			margin-bottom: 20px;
+			font-size: 24px;
+			padding: 12px 8px 12px 50px;
+			cursor: pointer;
+			position: relative;
+		}
+		li::before {
+			content: '';
+			position: absolute;
+			height: 28px;
+			width: 28px;
+			border-radius: 50%;
+			background-image: url('../../public/images/unchecked.png');
+			background-size: cover;
+			background-position: center;
+			top: 10px;
+			left: 10px;
+		}
+		li.checkmark {
+			color: #555;
+			text-decoration: line-through;
+		}
+		li.checkmark::before {
+			background-image: url('../../public/images/checked.png');
+		}
+	}
+}
