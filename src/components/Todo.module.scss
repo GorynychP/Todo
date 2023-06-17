@@ -4,11 +4,39 @@
 	background: #fff;
 	margin: 100px auto 20px;
 	padding: 40px 30px 70px;
-	border-radius: 10px;
+	border-radius: 20px;
 
 	h1 {
 		color: #403f80;
 		margin-bottom: 40px;
+	}
+
+	.row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background: #edeef0;
+		border-radius: 35px;
+		padding-left: 20px;
+		margin-bottom: 50px;
+		input {
+			flex: 1;
+			border: none;
+			outline: none;
+			background: transparent;
+			padding: 10px;
+			font-weight: 14px;
+		}
+		button {
+			border: none;
+			outline: none;
+			padding: 16px 50px;
+			background: #ff5945;
+			color: #fff;
+			font-style: 16px;
+			cursor: pointer;
+			border-radius: 40px;
+		}
 	}
 	ul {
 		list-style-type: none;
@@ -16,28 +44,82 @@
 		li {
 			margin-bottom: 20px;
 			font-size: 24px;
-			padding: 12px 8px 12px 50px;
-			cursor: pointer;
+			padding: 12px 50px 12px 50px;
+			border: 3px solid rgb(231, 89, 6);
+			background-color: #bcbbee;
+			border-radius: 20px;
 			position: relative;
 		}
-		li::before {
-			content: '';
+		// li::before {
+		// 	content: '';
+		// 	position: absolute;
+		// 	height: 28px;
+		// 	width: 28px;
+		// 	border-radius: 50%;
+		// 	// background-image: url('../../public/images/unchecked.png');
+		// 	background-size: cover;
+		// 	background-position: center;
+		// 	top: 15px;
+		// 	left: 10px;
+		// 	cursor: pointer;
+		// }
+
+		// img {
+		// 	content: '';
+		// 	position: absolute;
+		// 	top: 15px;
+		// 	left: 10px;
+		// 	width: 28px;
+		// 	height: 28px;
+		// 	background-size: cover;
+		// 	background-position: center;
+		// 	cursor: pointer;
+		// }
+		// img.checked {
+		// 	background-image: url('../../public/images/checked.png');
+		// }
+
+		// img.unchecked {
+		// 	background-image: url('../../public/images/unchecked.png');
+		// 	color: #555;
+		// 	text-decoration: line-through;
+		// }
+
+		// li.checked::before {
+		// 	background-image: url('../../public/images/checked.png');
+		// }
+
+		// li.unchecked::before {
+		// 	background-image: url('../../public/images/unchecked.png');
+		// 	color: #555;
+		// 	text-decoration: line-through;
+		// }
+
+		// li.checkmark {
+		// 	color: #555;
+		// 	text-decoration: line-through;
+		// }
+		// li.checkmark::before {
+		// 	background-image: url('../../public/images/checked.png');
+		// }
+		span {
 			position: absolute;
-			height: 28px;
-			width: 28px;
-			border-radius: 50%;
-			background-image: url('../../public/images/unchecked.png');
-			background-size: cover;
-			background-position: center;
-			top: 10px;
-			left: 10px;
+			right: 0px;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 60px;
+			height: 40px;
+			font-size: 22px;
+			color: #b92828;
+			font-weight: bold;
+			line-height: 40px;
+			text-align: center;
+			cursor: pointer;
 		}
-		li.checkmark {
-			color: #555;
-			text-decoration: line-through;
-		}
-		li.checkmark::before {
-			background-image: url('../../public/images/checked.png');
-		}
+		// span:hover {
+		// 	background: #dddddd;
+		// 	width: 40px;
+		// 	border-radius: 30px;
+		// }
 	}
 }
