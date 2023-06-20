@@ -1,3 +1,4 @@
+
 .todo_app {
 	width: 100%;
 	max-width: 600px;
@@ -8,6 +9,11 @@
 
 	h1 {
 		color: #403f80;
+		margin-bottom: 40px;
+		font-size: 40px;
+	}
+	h2 {
+		color: #a9a8d6;
 		margin-bottom: 40px;
 	}
 
@@ -25,101 +31,37 @@
 			outline: none;
 			background: transparent;
 			padding: 10px;
+			font-size: 20px;
 			font-weight: 14px;
 		}
 		button {
 			border: none;
 			outline: none;
 			padding: 16px 50px;
-			background: #ff5945;
+			background: #3667b7;
 			color: #fff;
 			font-style: 16px;
 			cursor: pointer;
 			border-radius: 40px;
 		}
 	}
-	ul {
-		list-style-type: none;
-		padding: 0;
-		li {
-			margin-bottom: 20px;
-			font-size: 24px;
-			padding: 12px 50px 12px 50px;
-			border: 3px solid rgb(231, 89, 6);
-			background-color: #bcbbee;
-			border-radius: 20px;
-			position: relative;
-		}
-		// li::before {
-		// 	content: '';
-		// 	position: absolute;
-		// 	height: 28px;
-		// 	width: 28px;
-		// 	border-radius: 50%;
-		// 	// background-image: url('../../public/images/unchecked.png');
-		// 	background-size: cover;
-		// 	background-position: center;
-		// 	top: 15px;
-		// 	left: 10px;
-		// 	cursor: pointer;
-		// }
 
-		// img {
-		// 	content: '';
-		// 	position: absolute;
-		// 	top: 15px;
-		// 	left: 10px;
-		// 	width: 28px;
-		// 	height: 28px;
-		// 	background-size: cover;
-		// 	background-position: center;
-		// 	cursor: pointer;
-		// }
-		// img.checked {
-		// 	background-image: url('../../public/images/checked.png');
-		// }
+}
 
-		// img.unchecked {
-		// 	background-image: url('../../public/images/unchecked.png');
-		// 	color: #555;
-		// 	text-decoration: line-through;
-		// }
 
-		// li.checked::before {
-		// 	background-image: url('../../public/images/checked.png');
-		// }
-
-		// li.unchecked::before {
-		// 	background-image: url('../../public/images/unchecked.png');
-		// 	color: #555;
-		// 	text-decoration: line-through;
-		// }
-
-		// li.checkmark {
-		// 	color: #555;
-		// 	text-decoration: line-through;
-		// }
-		// li.checkmark::before {
-		// 	background-image: url('../../public/images/checked.png');
-		// }
-		span {
-			position: absolute;
-			right: 0px;
-			top: 50%;
-			transform: translateY(-50%);
-			width: 60px;
-			height: 40px;
-			font-size: 22px;
-			color: #b92828;
-			font-weight: bold;
-			line-height: 40px;
-			text-align: center;
-			cursor: pointer;
-		}
-		// span:hover {
-		// 	background: #dddddd;
-		// 	width: 40px;
-		// 	border-radius: 30px;
-		// }
+.todoContainer {
+	.searchBlok {
+		display: flex;
+		justify-content: space-between;
+	}
+}
+.headerTodo {
+	display: flex;
+	justify-content: space-between;
+	.headerTodoImg{
+		margin-right: 50px;
+		margin-bottom: 40px;
+		width: 80px;
+		height: 60px;
 	}
 }

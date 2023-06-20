@@ -1,0 +1,29 @@
+.searchBlok {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border: 1px solid #f3f3f3;
+	border-radius: 10px;
+	padding: 0 15px;
+	margin-bottom: 20px;
+	width: 200px;
+	position: relative;
+	.searchField {
+		outline: none;
+		border: 0;
+		padding: 13px;
+		font-size: 12px;
+		width: 200px;
+	}
+	.clearField {
+		position: absolute;
+		right: 0;
+		padding: 0;
+		top: 14px;
+		right: 10px;
+		opacity: 0.5;
+		cursor: pointer;
+	}
+
+}
+

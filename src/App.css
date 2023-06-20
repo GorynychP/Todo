@@ -1,7 +1,8 @@
 * {
 	margin: 0;
 	padding: 0;
-	font-family: 'Mochiy Pop One', sans-serif;
+	/* font-family: 'Mochiy Pop One', sans-serif; */
+	font-family: 'Noto Serif', serif;
 }
 .container {
 	width: 100%;

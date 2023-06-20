@@ -1,0 +1,18 @@
+.selectedSearch {
+	border: 1px solid #e6dddd;
+	border-radius: 10px;
+	padding: 0 15px;
+	margin-bottom: 20px;
+	width: 140px;
+	opacity: 0.5;
+	outline: none;
+	// position: relative;
+}
+.selectedSearch:hover {
+	appearance: none;
+}
+.selSearch {
+	border: 1px solid #e6dddd;
+	border-radius: 10px;
+	opacity: 0.5;
+}
