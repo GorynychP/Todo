@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './Todo.module.scss';
-import axios from 'axios';
 import Search from './Search';
 import MySelect from './MySelect';
 import UlTodo from './UlTodo/UlTodo';
@@ -18,6 +17,7 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 	const addNewPost = () => {
 		const todosAddDbRef = ref(db, 'todos');
 		push(todosAddDbRef, {
+			data: new Date().toLocaleTimeString(),
 			title: post,
 			checked: false,
 		})
@@ -27,33 +27,6 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 			.catch((error) => {
 				console.log('Не удалось отправить данные на сервер', error);
 			});
-		// const newPost = {
-		// 	id: new Date().toLocaleTimeString(),
-		// 	title: post,
-		// 	checked: false
-		// };
-		// if (
-		// 	todo.find(
-		// 		(objj) =>
-		// 			objj.title.toLowerCase().trim() ===
-		// 			newPost.title.toLowerCase().trim(),
-		// 	)
-		// ) {
-		// 	setTodo((prev) => [...prev]);
-		// 	alert('Задача уже была создана');
-		// } else if (post === '') {
-		// 	setTodo((prev) => [...prev]);
-		// 	alert('Задача НЕ может быть пустая');
-		// } else {
-		// 	axios
-		// 		.post('http://localhost:3004/todos', newPost)
-		// .then((response) => {
-		// 	console.log('Данные успешно отправлены на сервер', response);
-		// })
-		// .catch((error) => {
-		// 	console.log('Не удалось отправить данные на сервер', error);
-		// });
-		// setTodo((prev) => [...prev, newPost]);
 		setPost('');
 	};
 	const editTodo = (id, title) => {
@@ -62,36 +35,33 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 	};
 	const deletePost = (id) => {
 		const todosAddDbRef = ref(db, `todos/${id}`);
-		remove(todosAddDbRef)
-			.then(() => {
-				console.log('Данные успешно удалены');
-			})
-			.catch((error) => {
-				console.log('Не удалось удалить данные', error);
-			});
-		// setTodo((prev) => prev.filter((filt) => filt.id !== id));
+		console.log(`todos/${id} быд удален `);
+		remove(todosAddDbRef);
 	};
 	const saveTodo = (id) => {
 		const newTodoDbRef = ref(db, `todos/${id}`);
 		update(newTodoDbRef, {
 			title: value,
-		})
+		});
 		setEdit(null);
 	};
+
 	const sortTodo = (sort) => {
 		setSelectedSort(sort);
-		// setTodo(Object.entries([...todo]).sort((a, b) => a[sort].localeCompare(b[sort])));
-		// setTodo(Object.entries(todo).sort(([id1, obj1], [id2, obj2]) => obj1[sort].localeCompare(obj2[sort])));
-		const sortedTodo = Object.entries(todo).sort(([id1, obj1], [id2, obj2]) => {
-			const value1 = (obj1.sort || '');
-			const value2 = (obj2.sort || '');
+		setTodo((prevTodo) => {
+			const sortedTodo = Object.entries(prevTodo).sort(([, task1], [, task2]) =>
+				task1[sort].localeCompare(task2[sort]),
+			);
 
-			return value1.localeCompare(value2);
-		  });
+			const sortedTodoObj = sortedTodo.reduce((obj, [id, task]) => {
+				obj[id] = task;
+				return obj;
+			}, {});
 
-		  setTodo(sortedTodo);
-
+			return sortedTodoObj;
+		});
 	};
+
 	const onTodoChecked = (id) => {
 		const todoCheckedDbRef = ref(db, `todos/${id}`);
 
@@ -133,7 +103,7 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 							defaultValue="Sorting"
 							options={[
 								{ value: 'title', name: 'by name' },
-								{ value: 'id', name: 'by date' },
+								{ value: 'data', name: 'by date' },
 							]}
 						/>
 						<Search

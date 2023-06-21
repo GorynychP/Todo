@@ -9,7 +9,6 @@ function App() {
 	const [post, setPost] = useState('');
 	useEffect(() => {
 		const todoListDbRef = ref(db, 'todos')
-
 		return onValue(todoListDbRef, (todo)=> {
 			const loadedTodo = todo.val() || {};
 			setTodo(loadedTodo)
