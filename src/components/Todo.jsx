@@ -4,6 +4,8 @@ import axios from 'axios';
 import Search from './Search';
 import MySelect from './MySelect';
 import UlTodo from './UlTodo/UlTodo';
+import { ref, push, update, remove, get } from 'firebase/database';
+import { db } from '../firebase';
 const Todo = ({ todo, setTodo, post, setPost }) => {
 	const [edit, setEdit] = useState(null);
 	const [value, setValue] = useState('');
@@ -14,34 +16,44 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 		setPost(target.value);
 	};
 	const addNewPost = () => {
-		const newPost = {
-			id: new Date().toLocaleTimeString(),
+		const todosAddDbRef = ref(db, 'todos');
+		push(todosAddDbRef, {
 			title: post,
 			checked: false,
-		};
-		if (
-			todo.find(
-				(objj) =>
-					objj.title.toLowerCase().trim() ===
-					newPost.title.toLowerCase().trim(),
-			)
-		) {
-			setTodo((prev) => [...prev]);
-			alert('Задача уже была создана');
-		} else if (post === '') {
-			setTodo((prev) => [...prev]);
-			alert('Задача НЕ может быть пустая');
-		} else {
-			axios
-				.post('http://localhost:3004/todos', newPost)
-				.then((response) => {
-					console.log('Данные успешно отправлены на сервер', response);
-				})
-				.catch((error) => {
-					console.log('Не удалось отправить данные на сервер', error);
-				});
-			setTodo((prev) => [...prev, newPost]);
-		}
+		})
+			.then((response) => {
+				console.log('Данные успешно отправлены на сервер', response);
+			})
+			.catch((error) => {
+				console.log('Не удалось отправить данные на сервер', error);
+			});
+		// const newPost = {
+		// 	id: new Date().toLocaleTimeString(),
+		// 	title: post,
+		// 	checked: false
+		// };
+		// if (
+		// 	todo.find(
+		// 		(objj) =>
+		// 			objj.title.toLowerCase().trim() ===
+		// 			newPost.title.toLowerCase().trim(),
+		// 	)
+		// ) {
+		// 	setTodo((prev) => [...prev]);
+		// 	alert('Задача уже была создана');
+		// } else if (post === '') {
+		// 	setTodo((prev) => [...prev]);
+		// 	alert('Задача НЕ может быть пустая');
+		// } else {
+		// 	axios
+		// 		.post('http://localhost:3004/todos', newPost)
+		// .then((response) => {
+		// 	console.log('Данные успешно отправлены на сервер', response);
+		// })
+		// .catch((error) => {
+		// 	console.log('Не удалось отправить данные на сервер', error);
+		// });
+		// setTodo((prev) => [...prev, newPost]);
 		setPost('');
 	};
 	const editTodo = (id, title) => {
@@ -49,55 +61,52 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 		setValue(title);
 	};
 	const deletePost = (id) => {
-		axios.delete(`http://localhost:3004/todos/${id}`)
-		.then((response) => {
-			console.log('Данные успешно удалены', response);
-		})
-		.catch((error) => {
-			console.log('Не удалось удалить данные', error);
-		});
-		setTodo((prev) => prev.filter((filt) => filt.id !== id));
+		const todosAddDbRef = ref(db, `todos/${id}`);
+		remove(todosAddDbRef)
+			.then(() => {
+				console.log('Данные успешно удалены');
+			})
+			.catch((error) => {
+				console.log('Не удалось удалить данные', error);
+			});
+		// setTodo((prev) => prev.filter((filt) => filt.id !== id));
 	};
 	const saveTodo = (id) => {
-		let newTodo = [...todo].map((item) => {
-			if (item.id === id) {
-				item.title = value;
-				axios.patch(`http://localhost:3004/todos/${id}`, { title: value })
-				.then((response) => {
-					console.log('Данные успешно сохранены', response);
-				})
-				.catch((error) => {
-					console.log('Не удалось сохранить данные', error);
-				});
-			}
-			return item;
-		});
-		setTodo(newTodo);
+		const newTodoDbRef = ref(db, `todos/${id}`);
+		update(newTodoDbRef, {
+			title: value,
+		})
 		setEdit(null);
 	};
 	const sortTodo = (sort) => {
 		setSelectedSort(sort);
-		setTodo([...todo].sort((a, b) => a[sort].localeCompare(b[sort])));
+		// setTodo(Object.entries([...todo]).sort((a, b) => a[sort].localeCompare(b[sort])));
+		// setTodo(Object.entries(todo).sort(([id1, obj1], [id2, obj2]) => obj1[sort].localeCompare(obj2[sort])));
+		const sortedTodo = Object.entries(todo).sort(([id1, obj1], [id2, obj2]) => {
+			const value1 = (obj1.sort || '');
+			const value2 = (obj2.sort || '');
+
+			return value1.localeCompare(value2);
+		  });
+
+		  setTodo(sortedTodo);
+
 	};
 	const onTodoChecked = (id) => {
-		setTodo(
-			[...todo].map((item) => {
-				if (item.id === id) {
-					if (item.checked === true) {
-						axios.patch(`http://localhost:3004/todos/${id}`, {
-							checked: false,
-						})
-						return { ...item, checked: false };
-					} else {
-						axios.patch(`http://localhost:3004/todos/${id}`, {
-							checked: true,
-						});
-						return { ...item, checked: true };
-					}
-				}
-				return item;
-			}),
-		);
+		const todoCheckedDbRef = ref(db, `todos/${id}`);
+
+		get(todoCheckedDbRef).then((snapshot) => {
+			const currentChecked = snapshot.val().checked;
+			update(todoCheckedDbRef, {
+				checked: !currentChecked,
+			})
+				.then(() => {
+					console.log(`Значение checked успешно обновлено.`);
+				})
+				.catch((error) => {
+					console.log(`Не удалось обновить checked. Ошибка: ${error}`);
+				});
+		});
 	};
 
 	return (
@@ -115,7 +124,7 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 				/>
 				<button onClick={addNewPost}>Add</button>
 			</div>
-			{todo.length ? (
+			{Object.entries(todo).length ? (
 				<div className={styles.todoContainer}>
 					<div className={styles.searchBlok}>
 						<MySelect

@@ -13,55 +13,56 @@ const UlTodo = ({
 }) => {
 	return (
 			<ul>
-				{todo
-					.filter((item) =>
-						item.title
+				{Object.entries(todo)
+					.filter(([id, {title}]) =>
+						title
 							.toLowerCase()
 							.includes(searchValue.toLowerCase().trim()),
 					)
-					.map((item, index) =>
-						edit === item.id ? (
-							<div className={styles.editContainer} key={item.id}>
+					.map(([id, {title, checked}], index ) =>
+						edit === id ? (
+							<div className={styles.editContainer} key={id}>
 								<input
 									className={styles.editInput}
 									value={value}
 									onChange={({ target }) => setValue(target.value)}
 								/>
-								<button onClick={() => saveTodo(item.id)}>Save</button>
+								<button onClick={() => saveTodo(id)}>Save</button>
 							</div>
 						) : (
 							<li
-								key={item.id}
-								id={item.id}
-								className={item.checked ? styles.check : ''}
+								key={id}
+								id={id}
+								className={checked ? styles.check : ''}
 							>
-								{item.checked ? (
+								{checked ? (
 									<img
 										className={styles.checkbox}
 										src="./images/checked.png"
 										alt="checked"
-										onClick={() => onTodoChecked(item.id)}
+										onClick={() => onTodoChecked(id)}
 									/>
 								) : (
 									<img
 										className={styles.checkbox}
 										src="./images/unchecked.png"
 										alt="unchecked"
-										onClick={() => onTodoChecked(item.id)}
+										onClick={() => onTodoChecked(id)}
 									/>
 								)}
-								<span>{index + 1}</span>. {item.title}
+								<span>{index + 1}</span>.
+								{title}
 								<img
 									className={styles.edit}
 									src="/images/edit.svg"
 									alt="edit"
-									onClick={() => editTodo(item.id, item.title)}
+									onClick={() => editTodo(id, title)}
 								/>
 								<img
 									className={styles.deletePost}
 									src="/images/delete.svg"
 									alt="edit"
-									onClick={() => deletePost(item.id)}
+									onClick={() => deletePost(id)}
 								/>
 							</li>
 						),

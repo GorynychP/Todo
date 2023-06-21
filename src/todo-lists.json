@@ -1,3 +1,12 @@
 {
-  "todos": []
+  "todos": {
+	"001": {
+		"title": "Тест",
+		"checked": false
+	},
+	"002": {
+		"title": "Тест2",
+		"checked": false
+	}
+  }
 }

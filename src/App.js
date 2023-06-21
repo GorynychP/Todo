@@ -1,18 +1,19 @@
-import axios from 'axios';
+// import axios from 'axios';
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import Todo from './components/Todo';
+import {ref, onValue} from 'firebase/database'
+import {db} from './firebase'
 function App() {
-	const [todo, setTodo] = useState([]);
+	const [todo, setTodo] = useState({});
 	const [post, setPost] = useState('');
 	useEffect(() => {
-		axios.get('http://localhost:3004/todos').then((res) => setTodo(res.data))
-		.then((response) => {
-			console.log('Данные успешно получены', response);
+		const todoListDbRef = ref(db, 'todos')
+
+		return onValue(todoListDbRef, (todo)=> {
+			const loadedTodo = todo.val() || {};
+			setTodo(loadedTodo)
 		})
-		.catch((error) => {
-			console.log('Не удалось получить  данные', error);
-		});
 	}, []);
 
 	return (
