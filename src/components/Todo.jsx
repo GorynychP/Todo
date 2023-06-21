@@ -32,7 +32,14 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 			setTodo((prev) => [...prev]);
 			alert('Задача НЕ может быть пустая');
 		} else {
-			axios.post('http://localhost:3004/todos', newPost);
+			axios
+				.post('http://localhost:3004/todos', newPost)
+				.then((response) => {
+					console.log('Данные успешно отправлены на сервер', response);
+				})
+				.catch((error) => {
+					console.log('Не удалось отправить данные на сервер', error);
+				});
 			setTodo((prev) => [...prev, newPost]);
 		}
 		setPost('');
@@ -42,14 +49,26 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 		setValue(title);
 	};
 	const deletePost = (id) => {
-		axios.delete(`http://localhost:3004/todos/${id}`);
+		axios.delete(`http://localhost:3004/todos/${id}`)
+		.then((response) => {
+			console.log('Данные успешно удалены', response);
+		})
+		.catch((error) => {
+			console.log('Не удалось удалить данные', error);
+		});
 		setTodo((prev) => prev.filter((filt) => filt.id !== id));
 	};
 	const saveTodo = (id) => {
 		let newTodo = [...todo].map((item) => {
 			if (item.id === id) {
 				item.title = value;
-				axios.patch(`http://localhost:3004/todos/${id}`, { title: value });
+				axios.patch(`http://localhost:3004/todos/${id}`, { title: value })
+				.then((response) => {
+					console.log('Данные успешно сохранены', response);
+				})
+				.catch((error) => {
+					console.log('Не удалось сохранить данные', error);
+				});
 			}
 			return item;
 		});
@@ -67,7 +86,7 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 					if (item.checked === true) {
 						axios.patch(`http://localhost:3004/todos/${id}`, {
 							checked: false,
-						});
+						})
 						return { ...item, checked: false };
 					} else {
 						axios.patch(`http://localhost:3004/todos/${id}`, {
@@ -84,8 +103,8 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 	return (
 		<div className={styles.todo_app}>
 			<div className={styles.headerTodo}>
-			<h1>To-Do List</h1>
-			<img className={styles.headerTodoImg}src="images/todo.png" alt="todo" />
+				<h1>To-Do List</h1>
+				<img className={styles.headerTodoImg} src="images/todo.png" alt="todo" />
 			</div>
 			<div className={styles.row}>
 				<input
@@ -124,7 +143,6 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 						editTodo={editTodo}
 						deletePost={deletePost}
 					/>
-
 				</div>
 			) : (
 				<h2>Add a task</h2>

@@ -6,7 +6,13 @@ function App() {
 	const [todo, setTodo] = useState([]);
 	const [post, setPost] = useState('');
 	useEffect(() => {
-		axios.get('http://localhost:3004/todos').then((res) => setTodo(res.data));
+		axios.get('http://localhost:3004/todos').then((res) => setTodo(res.data))
+		.then((response) => {
+			console.log('Данные успешно получены', response);
+		})
+		.catch((error) => {
+			console.log('Не удалось получить  данные', error);
+		});
 	}, []);
 
 	return (
