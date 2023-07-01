@@ -4,11 +4,17 @@ import axios from 'axios';
 import Search from './Search';
 import MySelect from './MySelect';
 import UlTodo from './UlTodo/UlTodo';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { Active } from './Routers/Active';
+
 const Todo = ({ todo, setTodo, post, setPost }) => {
 	const [edit, setEdit] = useState(null);
 	const [value, setValue] = useState('');
 	const [searchValue, setSearchValue] = useState('');
 	const [selectedSort, setSelectedSort] = useState('');
+	const [title, setTitle] = useState('');
+
+	const navigate = useNavigate();
 
 	const handleChange = ({ target }) => {
 		setPost(target.value);
@@ -49,26 +55,30 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 		setValue(title);
 	};
 	const deletePost = (id) => {
-		axios.delete(`http://localhost:3004/todos/${id}`)
-		.then((response) => {
-			console.log('Данные успешно удалены', response);
-		})
-		.catch((error) => {
-			console.log('Не удалось удалить данные', error);
-		});
+		axios
+			.delete(`http://localhost:3004/todos/${id}`)
+			.then((response) => {
+				console.log('Данные успешно удалены', response);
+				navigate('/');
+			})
+			.catch((error) => {
+				console.log('Не удалось удалить данные', error);
+			});
 		setTodo((prev) => prev.filter((filt) => filt.id !== id));
 	};
 	const saveTodo = (id) => {
 		let newTodo = [...todo].map((item) => {
 			if (item.id === id) {
 				item.title = value;
-				axios.patch(`http://localhost:3004/todos/${id}`, { title: value })
-				.then((response) => {
-					console.log('Данные успешно сохранены', response);
-				})
-				.catch((error) => {
-					console.log('Не удалось сохранить данные', error);
-				});
+				axios
+					.patch(`http://localhost:3004/todos/${id}`, { title: value })
+					.then((response) => {
+						console.log('Данные успешно сохранены', response);
+						setTitle(value)
+					})
+					.catch((error) => {
+						console.log('Не удалось сохранить данные', error);
+					});
 			}
 			return item;
 		});
@@ -86,7 +96,7 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 					if (item.checked === true) {
 						axios.patch(`http://localhost:3004/todos/${id}`, {
 							checked: false,
-						})
+						});
 						return { ...item, checked: false };
 					} else {
 						axios.patch(`http://localhost:3004/todos/${id}`, {
@@ -99,12 +109,27 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 			}),
 		);
 	};
-
+	const NotFount = () => {
+		return (
+			<div>
+				<h1>Oops!</h1>
+				<p>Такой страницы не существует</p>
+			</div>
+		);
+	};
 	return (
 		<div className={styles.todo_app}>
 			<div className={styles.headerTodo}>
-				<h1>To-Do List</h1>
-				<img className={styles.headerTodoImg} src="images/todo.png" alt="todo" />
+				<Link to="/">
+					<h1>To-Do List</h1>
+				</Link>
+				<Link to="/">
+					<img
+						className={styles.headerTodoImg}
+						src="images/todo.png"
+						alt="todo"
+					/>
+				</Link>
 			</div>
 			<div className={styles.row}>
 				<input
@@ -132,17 +157,40 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 							setSearchValue={setSearchValue}
 						/>
 					</div>
-					<UlTodo
-						todo={todo}
-						searchValue={searchValue}
-						edit={edit}
-						setValue={setValue}
-						value={value}
-						saveTodo={saveTodo}
-						onTodoChecked={onTodoChecked}
-						editTodo={editTodo}
-						deletePost={deletePost}
-					/>
+					<Routes>
+						<Route
+							path="/todo/:id"
+							element={
+								<Active
+									todo={todo}
+									edit={edit}
+									setValue={setValue}
+									saveTodo={saveTodo}
+									value={value}
+									editTodo={editTodo}
+									title={title}
+									setTitle={setTitle}
+								/>
+							}
+						></Route>
+						<Route
+							path="/"
+							element={
+								<UlTodo
+									todo={todo}
+									searchValue={searchValue}
+									edit={edit}
+									setValue={setValue}
+									value={value}
+									saveTodo={saveTodo}
+									onTodoChecked={onTodoChecked}
+									editTodo={editTodo}
+									deletePost={deletePost}
+								/>
+							}
+						></Route>
+						<Route path="*" element={<NotFount />}></Route>
+					</Routes>
 				</div>
 			) : (
 				<h2>Add a task</h2>

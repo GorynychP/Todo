@@ -1,17 +1,23 @@
-import React from 'react';
 import styles from './UlTodo.module.scss';
+import { Link } from 'react-router-dom';
+
 const UlTodo = ({
 	todo,
 	searchValue,
-	edit,
-	setValue,
-	value,
-	saveTodo,
 	onTodoChecked,
-	editTodo,
 	deletePost,
 }) => {
+	const MAX_LENGTH = 25;
+	const truncateText = (text) => {
+		if (text.length <= MAX_LENGTH) {
+			return text;
+		} else {
+			return text.substring(0, MAX_LENGTH) + ' . . . ';
+		}
+	};
+
 	return (
+		<>
 			<ul>
 				{todo
 					.filter((item) =>
@@ -20,16 +26,6 @@ const UlTodo = ({
 							.includes(searchValue.toLowerCase().trim()),
 					)
 					.map((item, index) =>
-						edit === item.id ? (
-							<div className={styles.editContainer} key={item.id}>
-								<input
-									className={styles.editInput}
-									value={value}
-									onChange={({ target }) => setValue(target.value)}
-								/>
-								<button onClick={() => saveTodo(item.id)}>Save</button>
-							</div>
-						) : (
 							<li
 								key={item.id}
 								id={item.id}
@@ -50,23 +46,19 @@ const UlTodo = ({
 										onClick={() => onTodoChecked(item.id)}
 									/>
 								)}
-								<span>{index + 1}</span>. {item.title}
-								<img
-									className={styles.edit}
-									src="/images/edit.svg"
-									alt="edit"
-									onClick={() => editTodo(item.id, item.title)}
-								/>
+								<Link to={`/todo/${item.id}`}>
+									<span>{index + 1}</span>. {truncateText(item.title)}
+								</Link>
 								<img
 									className={styles.deletePost}
 									src="/images/delete.svg"
-									alt="edit"
+									alt="delete"
 									onClick={() => deletePost(item.id)}
 								/>
 							</li>
-						),
 					)}
 			</ul>
+		</>
 	);
 };
 

@@ -1,0 +1,83 @@
+.active {
+	margin-bottom: 20px;
+	font-size: 24px;
+	padding: 12px 70px 12px 20px;
+	border: 3px solid rgb(231, 89, 6);
+	background-color: #bcbbee;
+	border-radius: 20px;
+	overflow: hidden;
+	word-wrap: break-word;
+	height: auto;
+	position: relative;
+	.edit {
+		// content: '';
+		position: absolute;
+		top: 50px;
+		right: 10px;
+		width: 50px;
+		height: 50px;
+		background-size: cover;
+		background-position: center;
+		cursor: pointer;
+	}
+
+	.header {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.title {
+		margin-top: 20px;
+	}
+
+	.editContainer {
+		display: flex;
+		margin-top: 20px;
+		align-items: center;
+		justify-content: space-between;
+		background-color: #6463a4;
+		border-radius: 35px;
+		height: auto;
+		padding-left: 10px;
+		margin-bottom: 30px;
+
+		.editInput {
+			flex: 1;
+			border: none;
+			outline: none;
+			background: transparent;
+			padding: 10px;
+			font-weight: 14px;
+			font-size: 24px;
+			white-space: pre-wrap;
+			height: auto;
+			// border: 3px solid rgb(231, 89, 6);
+			// background-color: #bcbbee;
+		}
+		.btnSave {
+			font-size: 20px;
+			border: none;
+			outline: none;
+			padding: 20px 20px;
+			background: #36b752;
+			color: #fff;
+			font-style: 16px;
+			cursor: pointer;
+			border-radius: 35px;
+			// border: 3px solid rgb(231, 89, 6);
+		}
+	}
+	.btnBack {
+		font-size: 50px;
+		border: none;
+		outline: none;
+		width: 60px;
+
+		padding: 5px 5px;
+		background: #3b0c757c;
+		color: #fff;
+		cursor: pointer;
+		border-radius: 20px;
+		// border: 3px solid rgb(231, 89, 6);
+	}
+}
