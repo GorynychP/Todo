@@ -39,7 +39,7 @@ export const Active = ({
 						className={styles.editInput}
 						value={value}
 						onChange={({ target }) => setValue(target.value)}
-						rows={3}
+						rows={4}
 					/>
 					<button className={styles.btnSave} onClick={() => saveTodo(params.id)}>Save</button>
 				</div>
