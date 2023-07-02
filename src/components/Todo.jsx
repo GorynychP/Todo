@@ -63,6 +63,7 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 			})
 			.catch((error) => {
 				console.log('Не удалось удалить данные', error);
+				navigate('/');
 			});
 		setTodo((prev) => prev.filter((filt) => filt.id !== id));
 	};
@@ -159,21 +160,6 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 					</div>
 					<Routes>
 						<Route
-							path="/todo/:id"
-							element={
-								<Active
-									todo={todo}
-									edit={edit}
-									setValue={setValue}
-									saveTodo={saveTodo}
-									value={value}
-									editTodo={editTodo}
-									title={title}
-									setTitle={setTitle}
-								/>
-							}
-						></Route>
-						<Route
 							path="/"
 							element={
 								<UlTodo
@@ -185,6 +171,23 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 									saveTodo={saveTodo}
 									onTodoChecked={onTodoChecked}
 									editTodo={editTodo}
+									deletePost={deletePost}
+								/>
+							}
+						></Route>
+						<Route
+							path="/todo/:id"
+							element={
+								<Active
+									todo={todo}
+									edit={edit}
+									setValue={setValue}
+									saveTodo={saveTodo}
+									value={value}
+									editTodo={editTodo}
+									title={title}
+									setTitle={setTitle}
+									setEdit={setEdit}
 									deletePost={deletePost}
 								/>
 							}

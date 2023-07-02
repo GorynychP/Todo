@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './Active.module.scss';
 import axios from 'axios';
 
 export const Active = ({
+	todo,
 	edit,
 	setValue,
 	saveTodo,
@@ -11,10 +12,11 @@ export const Active = ({
 	editTodo,
 	title,
 	setTitle,
+	deletePost,
+	setEdit
 }) => {
 	const navigate = useNavigate();
 	const params = useParams();
-	console.log(params.id);
 	useEffect(() => {
 		axios
 			.get(`http://localhost:3004/todos/${params.id}`)
@@ -24,15 +26,25 @@ export const Active = ({
 			})
 			.catch((error) => {
 				console.log('Не удалось todo получить данные', error);
+				setTitle('Такого todo не существует');
 			});
-	}, []);
+	}, [params.id, setTitle]);
 
 	return (
 		<div className={styles.active}>
 			<div className={styles.header}>
-				<button className={styles.btnBack} onClick={() => navigate('/')}> ⬅</button>
+				<button className={styles.btnBack} onClick={() => navigate('/')}>
+					{' '}
+					⬅
+				</button>
 				<h1>Полный контент </h1>
 			</div>
+			<img
+				className={styles.deletePost}
+				src="/images/delete.svg"
+				alt="delete"
+				onClick={() => deletePost(params.id)}
+			/>
 			{edit === params.id ? (
 				<div className={styles.editContainer} key={params.id}>
 					<textarea
@@ -41,17 +53,25 @@ export const Active = ({
 						onChange={({ target }) => setValue(target.value)}
 						rows={4}
 					/>
-					<button className={styles.btnSave} onClick={() => saveTodo(params.id)}>Save</button>
+					<div className={styles.btnContainer}>
+					<button
+						className={styles.btnSave}
+						onClick={() => saveTodo(params.id)}
+					>
+						Save
+					</button>
+					<button className={styles.btnCancel} onClick={() => setEdit(null)}>Cancel</button>
+					</div>
 				</div>
 			) : (
 				<>
-					<img
+
+					<p className={styles.title}> {title}  <img
 						className={styles.edit}
 						src="/images/edit.svg"
 						alt="edit"
 						onClick={() => editTodo(params.id, title)}
-					/>
-					<p className={styles.title}> {title}</p>
+					/> </p>
 				</>
 			)}
 		</div>
