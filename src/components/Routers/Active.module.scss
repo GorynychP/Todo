@@ -9,10 +9,16 @@
 	word-wrap: break-word;
 	height: auto;
 	position: relative;
+	h1 {
+		position: absolute;
+		left: 180px;
+	}
 	.title {
 		position: relative;
 		margin-bottom: 20px;
+		margin-top: 20px;
 		margin-left: 40px;
+		min-height: 30px;
 		border: 2px solid ;
 		background-color: #6463a4;
 		border-radius: 20px;
@@ -28,6 +34,9 @@
 			background-position: center;
 			cursor: pointer;
 		}
+		span {
+			opacity: 0.4;
+		}
 	}
 
 	.header {
@@ -35,9 +44,6 @@
 		justify-content: space-between;
 	}
 
-	.title {
-		margin-top: 20px;
-	}
 
 	.editContainer {
 		display: flex;

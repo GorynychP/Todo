@@ -32,11 +32,20 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 					newPost.title.toLowerCase().trim(),
 			)
 		) {
-			setTodo((prev) => [...prev]);
-			alert('Задача уже была создана');
-		} else if (post === '') {
-			setTodo((prev) => [...prev]);
-			alert('Задача НЕ может быть пустая');
+			if (newPost.title.length === 0) {
+				axios
+					.post('http://localhost:3004/todos', newPost)
+					.then((response) => {
+						console.log('Данные успешно отправлены на сервер', response);
+					})
+					.catch((error) => {
+						console.log('Не удалось отправить данные на сервер', error);
+					});
+				setTodo((prev) => [...prev, newPost]);
+			} else {
+				setTodo((prev) => [...prev]);
+				alert('Задача уже была создана');
+			}
 		} else {
 			axios
 				.post('http://localhost:3004/todos', newPost)
@@ -75,7 +84,7 @@ const Todo = ({ todo, setTodo, post, setPost }) => {
 					.patch(`http://localhost:3004/todos/${id}`, { title: value })
 					.then((response) => {
 						console.log('Данные успешно сохранены', response);
-						setTitle(value)
+						setTitle(value);
 					})
 					.catch((error) => {
 						console.log('Не удалось сохранить данные', error);

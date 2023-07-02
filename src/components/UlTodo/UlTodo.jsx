@@ -1,13 +1,8 @@
 import styles from './UlTodo.module.scss';
 import { Link } from 'react-router-dom';
 
-const UlTodo = ({
-	todo,
-	searchValue,
-	onTodoChecked,
-	deletePost,
-}) => {
-	const MAX_LENGTH = 25;
+const UlTodo = ({ todo, searchValue, onTodoChecked, deletePost }) => {
+	const MAX_LENGTH = 20;
 	const truncateText = (text) => {
 		if (text.length <= MAX_LENGTH) {
 			return text;
@@ -25,38 +20,43 @@ const UlTodo = ({
 							.toLowerCase()
 							.includes(searchValue.toLowerCase().trim()),
 					)
-					.map((item, index) =>
-							<li
-								key={item.id}
-								id={item.id}
-								className={item.checked ? styles.check : ''}
-							>
-								{item.checked ? (
-									<img
-										className={styles.checkbox}
-										src="./images/checked.png"
-										alt="checked"
-										onClick={() => onTodoChecked(item.id)}
-									/>
-								) : (
-									<img
-										className={styles.checkbox}
-										src="./images/unchecked.png"
-										alt="unchecked"
-										onClick={() => onTodoChecked(item.id)}
-									/>
-								)}
-								<Link to={`/todo/${item.id}`}>
-									<span>{index + 1}</span>. {truncateText(item.title)}
-								</Link>
+					.map((item, index) => (
+						<li
+							key={item.id}
+							id={item.id}
+							className={item.checked ? styles.check : ''}
+						>
+							{item.checked ? (
 								<img
-									className={styles.deletePost}
-									src="/images/delete.svg"
-									alt="delete"
-									onClick={() => deletePost(item.id)}
+									className={styles.checkbox}
+									src="./images/checked.png"
+									alt="checked"
+									onClick={() => onTodoChecked(item.id)}
 								/>
-							</li>
-					)}
+							) : (
+								<img
+									className={styles.checkbox}
+									src="./images/unchecked.png"
+									alt="unchecked"
+									onClick={() => onTodoChecked(item.id)}
+								/>
+							)}
+							<Link to={`/todo/${item.id}`}>
+								<span>{index + 1}</span>.{' '}
+								{item.title.length === 0 ? (
+									<span className={styles.void}> Add a task  🖊 ❗ ❗ ❗ ❱❱❱❱❱</span>
+								) : (
+									truncateText(item.title)
+								)}
+							</Link>
+							<img
+								className={styles.deletePost}
+								src="/images/delete.svg"
+								alt="delete"
+								onClick={() => deletePost(item.id)}
+							/>
+						</li>
+					))}
 			</ul>
 		</>
 	);
