@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styles from './Active.module.scss';
-// import axios from 'axios';
+import styles from './TodoFullContent.module.scss';
+import axios from 'axios';
 
-export const Active = ({
-	todo,
+export const TodoFullContent = ({
 	edit,
 	setValue,
 	saveTodo,
@@ -18,27 +17,22 @@ export const Active = ({
 	const navigate = useNavigate();
 	const params = useParams();
 
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		try {
-	// 			const response = await axios.get(
-	// 				`http://localhost:3004/todos/${params.id}`,
-	// 			);
-	// 			console.log('Данные todo успешно получены', response.data);
-	// 			setTitle(response.data.title);
-	// 		} catch (error) {
-	// 			console.log('Не удалось todo получить данные', error);
-	// 			setTitle('Такого todo не существует');
-	// 		}
-	// 	};
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(
+					`http://localhost:3004/todos/${params.id}`,
+				);
+				console.log('Данные todo успешно получены', response.data);
+				setTitle(response.data.title);
+			} catch (error) {
+				console.log('Не удалось todo получить данные', error);
+				setTitle('Такого todo не существует');
+			}
+		};
 
-	// 	fetchData();
-	// }, [params.id, setTitle]);
-
-	const task = todo.find((item) => item.id === params.id );
-	useEffect(()=> {
-		setTitle(task.title);
-	}, [params.id, setTitle, task.title]);
+		fetchData();
+	}, [params.id, setTitle]);
 
 	return (
 		<div className={styles.active}>
@@ -86,9 +80,11 @@ export const Active = ({
 				</div>
 			) : (
 				<>
-					<p className={styles.title}>
-						{task.title.length !== 0 ? task.title :<span>Do it ✍ ❱❱❱ 📝❱❱❱ ✅</span>}
-						{/* {title.length === 0 ? <span>Your task 📝</span> : title} */}
+					<p
+						onClick={() => editTodo(params.id, title)}
+						className={styles.title}
+					>
+						{title.length === 0 ? <span>Do it ✍ ❱❱❱ 📝❱❱❱ ✅</span> : title}
 						<img
 							className={styles.edit}
 							src="/images/edit.svg"

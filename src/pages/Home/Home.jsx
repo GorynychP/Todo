@@ -1,7 +1,7 @@
-import styles from './UlTodo.module.scss';
+import styles from './Home.module.scss';
 import { Link } from 'react-router-dom';
 
-const UlTodo = ({ todo, searchValue, onTodoChecked, deletePost }) => {
+export const Home = ({ todo, searchValue, onTodoChecked, deletePost }) => {
 	const MAX_LENGTH = 20;
 	const truncateText = (text) => {
 		if (text.length <= MAX_LENGTH) {
@@ -44,7 +44,10 @@ const UlTodo = ({ todo, searchValue, onTodoChecked, deletePost }) => {
 							<Link to={`/todo/${item.id}`}>
 								<span>{index + 1}</span>.{' '}
 								{item.title.length === 0 ? (
-									<span className={styles.void}> Add a task  🖊 ❗ ❗ ❗ ❱❱❱❱❱</span>
+									<span className={styles.void}>
+										{' '}
+										Add a task 🖊 ❗ ❗ ❗ ❱❱❱❱❱
+									</span>
 								) : (
 									truncateText(item.title)
 								)}
@@ -61,5 +64,3 @@ const UlTodo = ({ todo, searchValue, onTodoChecked, deletePost }) => {
 		</>
 	);
 };
-
-export default UlTodo;

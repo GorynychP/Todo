@@ -1,0 +1,60 @@
+h1 {
+	color: #403f80;
+	margin-bottom: 40px;
+	font-size: 40px;
+}
+h2 {
+	color: #a9a8d6;
+	margin-bottom: 40px;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: #edeef0;
+	border-radius: 35px;
+	padding-left: 20px;
+	margin-bottom: 50px;
+	input {
+		flex: 1;
+		border: none;
+		outline: none;
+		background: transparent;
+		padding: 10px;
+		font-size: 20px;
+		font-weight: 14px;
+	}
+	button {
+		border: none;
+		outline: none;
+		padding: 16px 50px;
+		background: #3667b7;
+		color: #fff;
+		font-style: 16px;
+		cursor: pointer;
+		border-radius: 40px;
+	}
+}
+
+a {
+	text-decoration: none;
+	color: #2d2b86;
+}
+
+.todoContainer {
+	.searchBlok {
+		display: flex;
+		justify-content: space-between;
+	}
+}
+.headerTodo {
+	display: flex;
+	justify-content: space-between;
+	.headerTodoImg {
+		margin-right: 50px;
+		margin-bottom: 40px;
+		width: 80px;
+		height: 60px;
+	}
+}
