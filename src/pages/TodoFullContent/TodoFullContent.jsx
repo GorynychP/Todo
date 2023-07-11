@@ -1,22 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './TodoFullContent.module.scss';
 import axios from 'axios';
+import { AppContext } from '../../context';
 
-export const TodoFullContent = ({
-	edit,
-	setValue,
-	saveTodo,
-	value,
-	editTodo,
-	title,
-	setTitle,
-	deletePost,
-	setEdit,
-}) => {
+export const TodoFullContent = () => {
 	const navigate = useNavigate();
 	const params = useParams();
-
+	const {
+		edit,
+		setValue,
+		saveTodo,
+		value,
+		editTodo,
+		title,
+		setTitle,
+		deletePost,
+		setEdit,
+	} = useContext(AppContext);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {

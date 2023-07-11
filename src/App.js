@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Header } from './components';
 import { Home, NotFound, TodoFullContent } from './pages';
+import { AppContext } from './context';
 
 function App() {
 	const [todo, setTodo] = useState([]);
@@ -84,54 +85,48 @@ function App() {
 	};
 
 	return (
-		<div className="App">
-			<div className="container">
-				<div className="todo-app">
-					<Header
-						searchValue={searchValue}
-						setSearchValue={setSearchValue}
-						todo={todo}
-						setTodo={setTodo}
-					/>
-					<Routes>
-						<Route
-							path="/"
-							element={
-								<Home
-									todo={todo}
-									searchValue={searchValue}
-									edit={edit}
-									setValue={setValue}
-									value={value}
-									saveTodo={saveTodo}
-									onTodoChecked={onTodoChecked}
-									editTodo={editTodo}
-									deletePost={deletePost}
-								/>
-							}
-						></Route>
-						<Route
-							path="/todo/:id"
-							element={
-								<TodoFullContent
-									todo={todo}
-									edit={edit}
-									setValue={setValue}
-									saveTodo={saveTodo}
-									value={value}
-									editTodo={editTodo}
-									title={title}
-									setTitle={setTitle}
-									setEdit={setEdit}
-									deletePost={deletePost}
-								/>
-							}
-						></Route>
-						<Route path="*" element={<NotFound />}></Route>
-					</Routes>
+		<AppContext.Provider
+			value={{
+				todo,
+				edit,
+				setValue,
+				saveTodo,
+				value,
+				editTodo,
+				title,
+				setTitle,
+				deletePost,
+				setEdit,
+			}}
+		>
+			<div className="App">
+				<div className="container">
+					<div className="todo-app">
+						<Header
+							searchValue={searchValue}
+							setSearchValue={setSearchValue}
+							todo={todo}
+							setTodo={setTodo}
+						/>
+						<Routes>
+							<Route
+								path="/"
+								element={
+									<Home
+										todo={todo}
+										searchValue={searchValue}
+										onTodoChecked={onTodoChecked}
+										deletePost={deletePost}
+									/>
+								}
+							></Route>
+							<Route path="/todo/:id" element={<TodoFullContent />}></Route>
+							<Route path="*" element={<NotFound />}></Route>
+						</Routes>
+					</div>
 				</div>
 			</div>
-		</div>
+		</AppContext.Provider>
 	);
 }
 

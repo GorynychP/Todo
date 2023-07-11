@@ -10,7 +10,6 @@ export const Home = ({ todo, searchValue, onTodoChecked, deletePost }) => {
 			return text.substring(0, MAX_LENGTH) + ' . . . ';
 		}
 	};
-
 	return (
 		<>
 			<ul>

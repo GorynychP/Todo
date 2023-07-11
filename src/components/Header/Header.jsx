@@ -13,8 +13,11 @@ export const Header = ({ searchValue, setSearchValue, todo, setTodo }) => {
 		setPost(target.value);
 	};
 	const addNewPost = () => {
+		const currentDate = new Date().getTime();
+		const id = `${currentDate}-${post}`;
+
 		const newPost = {
-			id: new Date().toLocaleTimeString(),
+			id: id,
 			title: post,
 			checked: false,
 		};
