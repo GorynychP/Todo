@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './Search.module.scss'
+import styles from './Search.module.scss';
 
-const Search = ({searchValue, setSearchValue}) => {
+export const Search = ({ searchValue, setSearchValue }) => {
 	return (
 		<div className={styles.searchBlok}>
 			<img width={16} height={16} src="/images/search.svg" alt="search" />
@@ -25,5 +25,3 @@ const Search = ({searchValue, setSearchValue}) => {
 		</div>
 	);
 };
-
-export default Search;

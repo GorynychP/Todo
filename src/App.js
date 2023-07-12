@@ -2,8 +2,8 @@ import axios from 'axios';
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { Header } from './components';
-import { Home, NotFound, TodoFullContent } from './pages';
+import { Header, MySelect, Search } from './components';
+import { NotFound, TodoFullContent, TodoList } from './pages';
 import { AppContext } from './context';
 
 function App() {
@@ -67,17 +67,10 @@ function App() {
 		setTodo(
 			[...todo].map((item) => {
 				if (item.id === id) {
-					if (item.checked === true) {
-						axios.patch(`http://localhost:3004/todos/${id}`, {
-							checked: false,
-						});
-						return { ...item, checked: false };
-					} else {
-						axios.patch(`http://localhost:3004/todos/${id}`, {
-							checked: true,
-						});
-						return { ...item, checked: true };
-					}
+					axios.patch(`http://localhost:3004/todos/${id}`, {
+						checked: !item.checked,
+					});
+					return { ...item, checked: !item.checked };
 				}
 				return item;
 			}),
@@ -88,6 +81,7 @@ function App() {
 		<AppContext.Provider
 			value={{
 				todo,
+				setTodo,
 				edit,
 				setValue,
 				saveTodo,
@@ -97,27 +91,35 @@ function App() {
 				setTitle,
 				deletePost,
 				setEdit,
+				onTodoChecked,
 			}}
 		>
 			<div className="App">
 				<div className="container">
 					<div className="todo-app">
-						<Header
-							searchValue={searchValue}
-							setSearchValue={setSearchValue}
-							todo={todo}
-							setTodo={setTodo}
-						/>
+						<Header todo={todo} setTodo={setTodo} />
+						{todo.length ? (
+							<div className="searchBlok">
+								<MySelect
+									defaultValue="Sorting"
+									options={[
+										{ value: 'title', name: 'by name' },
+										{ value: 'id', name: 'by date' },
+									]}
+								/>
+								<Search
+									searchValue={searchValue}
+									setSearchValue={setSearchValue}
+								/>
+							</div>
+						) : (
+							<h2>Add a task</h2>
+						)}
 						<Routes>
 							<Route
 								path="/"
 								element={
-									<Home
-										todo={todo}
-										searchValue={searchValue}
-										onTodoChecked={onTodoChecked}
-										deletePost={deletePost}
-									/>
+									<TodoList todo={todo} searchValue={searchValue} />
 								}
 							></Route>
 							<Route path="/todo/:id" element={<TodoFullContent />}></Route>

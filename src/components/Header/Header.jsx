@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import styles from './Header.module.scss';
 import { Link } from 'react-router-dom';
-import MySelect from '../MySelect';
-import Search from '../Search';
 import axios from 'axios';
 
-export const Header = ({ searchValue, setSearchValue, todo, setTodo }) => {
+export const Header = ({ todo, setTodo }) => {
 	const [post, setPost] = useState('');
-	const [selectedSort, setSelectedSort] = useState('');
 
 	const handleChange = ({ target }) => {
 		setPost(target.value);
@@ -55,10 +52,6 @@ export const Header = ({ searchValue, setSearchValue, todo, setTodo }) => {
 		}
 		setPost('');
 	};
-	const sortTodo = (sort) => {
-		setSelectedSort(sort);
-		setTodo([...todo].sort((a, b) => a[sort].localeCompare(b[sort])));
-	};
 	return (
 		<>
 			<div className={styles.headerTodo}>
@@ -82,27 +75,6 @@ export const Header = ({ searchValue, setSearchValue, todo, setTodo }) => {
 				/>
 				<button onClick={addNewPost}>Add</button>
 			</div>
-			{todo.length ? (
-				<div className={styles.todoContainer}>
-					<div className={styles.searchBlok}>
-						<MySelect
-							value={selectedSort}
-							onChange={sortTodo}
-							defaultValue="Sorting"
-							options={[
-								{ value: 'title', name: 'by name' },
-								{ value: 'id', name: 'by date' },
-							]}
-						/>
-						<Search
-							searchValue={searchValue}
-							setSearchValue={setSearchValue}
-						/>
-					</div>
-				</div>
-			) : (
-				<h2>Add a task</h2>
-			)}
 		</>
 	);
 };
