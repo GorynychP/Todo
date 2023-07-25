@@ -3,21 +3,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './TodoFullContent.module.scss';
 import axios from 'axios';
 import { AppContext } from '../../context';
+import { useDispatch, useSelector } from 'react-redux';
+import { editAction, titleAction, valueAction } from '../../actions';
 
 export const TodoFullContent = () => {
+	const dispatch = useDispatch();
+	const todoValue = useSelector((state) => state.todoValue);
+	const edit = useSelector((state) => state.edit);
+	const title = useSelector((state) => state.title);
 	const navigate = useNavigate();
 	const params = useParams();
-	const {
-		edit,
-		setValue,
-		saveTodo,
-		value,
-		editTodo,
-		title,
-		setTitle,
-		deletePost,
-		setEdit,
-	} = useContext(AppContext);
+	const { saveTodo, editTodo, deletePost } = useContext(AppContext);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -25,15 +21,15 @@ export const TodoFullContent = () => {
 					`http://localhost:3004/todos/${params.id}`,
 				);
 				console.log('Данные todo успешно получены', response.data);
-				setTitle(response.data.title);
+				dispatch(titleAction(response.data.title));
 			} catch (error) {
 				console.log('Не удалось todo получить данные', error);
-				setTitle('Такого todo не существует');
+				dispatch(titleAction('Такого todo не существует'));
 			}
 		};
 
 		fetchData();
-	}, [params.id, setTitle]);
+	}, [params.id]);
 
 	return (
 		<div className={styles.active}>
@@ -42,7 +38,7 @@ export const TodoFullContent = () => {
 					className={styles.btnBack}
 					onClick={() => {
 						navigate('/');
-						setEdit(null);
+						dispatch(editAction(null));
 					}}
 				>
 					{' '}
@@ -60,8 +56,8 @@ export const TodoFullContent = () => {
 				<div className={styles.editContainer} key={params.id}>
 					<textarea
 						className={styles.editInput}
-						value={value}
-						onChange={({ target }) => setValue(target.value)}
+						value={todoValue}
+						onChange={({ target }) => dispatch(valueAction(target.value))}
 						rows={5}
 					/>
 					<div className={styles.btnContainer}>
@@ -73,7 +69,7 @@ export const TodoFullContent = () => {
 						</button>
 						<button
 							className={styles.btnCancel}
-							onClick={() => setEdit(null)}
+							onClick={() => dispatch(editAction(null))}
 						>
 							Cancel
 						</button>

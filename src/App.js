@@ -5,13 +5,13 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Header, MySelect, Search } from './components';
 import { NotFound, TodoFullContent, TodoList } from './pages';
 import { AppContext } from './context';
+import { useDispatch, useSelector } from 'react-redux';
+import { editAction, titleAction, valueAction } from './actions';
 
 function App() {
+	const todoValue = useSelector((state) => state.todoValue);
+	const dispatch = useDispatch();
 	const [todo, setTodo] = useState([]);
-	const [edit, setEdit] = useState(null);
-	const [value, setValue] = useState('');
-	const [searchValue, setSearchValue] = useState('');
-	const [title, setTitle] = useState('');
 
 	useEffect(() => {
 		axios
@@ -28,8 +28,8 @@ function App() {
 	const navigate = useNavigate();
 
 	const editTodo = (id, title) => {
-		setEdit(id);
-		setValue(title);
+		dispatch(editAction(id));
+		dispatch(valueAction(title));
 	};
 	const deletePost = (id) => {
 		axios
@@ -47,12 +47,12 @@ function App() {
 	const saveTodo = (id) => {
 		let newTodo = [...todo].map((item) => {
 			if (item.id === id) {
-				item.title = value;
+				item.title = todoValue;
 				axios
-					.patch(`http://localhost:3004/todos/${id}`, { title: value })
+					.patch(`http://localhost:3004/todos/${id}`, { title: todoValue })
 					.then((response) => {
 						console.log('Данные успешно сохранены', response.data);
-						setTitle(value);
+						dispatch(titleAction(todoValue));
 					})
 					.catch((error) => {
 						console.log('Не удалось сохранить данные', error);
@@ -61,7 +61,7 @@ function App() {
 			return item;
 		});
 		setTodo(newTodo);
-		setEdit(null);
+		dispatch(editAction(null));
 	};
 	const onTodoChecked = (id) => {
 		setTodo(
@@ -82,15 +82,9 @@ function App() {
 			value={{
 				todo,
 				setTodo,
-				edit,
-				setValue,
 				saveTodo,
-				value,
 				editTodo,
-				title,
-				setTitle,
 				deletePost,
-				setEdit,
 				onTodoChecked,
 			}}
 		>
@@ -107,21 +101,13 @@ function App() {
 										{ value: 'id', name: 'by date' },
 									]}
 								/>
-								<Search
-									searchValue={searchValue}
-									setSearchValue={setSearchValue}
-								/>
+								<Search />
 							</div>
 						) : (
 							<h2>Add a task</h2>
 						)}
 						<Routes>
-							<Route
-								path="/"
-								element={
-									<TodoList todo={todo} searchValue={searchValue} />
-								}
-							></Route>
+							<Route path="/" element={<TodoList todo={todo} />}></Route>
 							<Route path="/todo/:id" element={<TodoFullContent />}></Route>
 							<Route path="*" element={<NotFound />}></Route>
 						</Routes>

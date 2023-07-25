@@ -1,6 +1,8 @@
+import { useSelector } from 'react-redux';
 import { TodoItems } from '../../components';
 import styles from './TodoList.module.scss';
-export const TodoList = ({ todo, searchValue }) => {
+export const TodoList = ({ todo }) => {
+	const searchValue = useSelector((state) => state.searchValue);
 	const todoFilter = (arr) => {
 		const filteredTodos = arr.filter((item) =>
 			item.title.toLowerCase().includes(searchValue.toLowerCase().trim()),

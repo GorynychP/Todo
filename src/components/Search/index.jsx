@@ -1,7 +1,11 @@
 import React from 'react';
 import styles from './Search.module.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchAction } from '../../actions';
 
-export const Search = ({ searchValue, setSearchValue }) => {
+export const Search = () => {
+	const searchValue = useSelector((state) => state.searchValue);
+	const dispatch = useDispatch();
 	return (
 		<div className={styles.searchBlok}>
 			<img width={16} height={16} src="/images/search.svg" alt="search" />
@@ -10,7 +14,7 @@ export const Search = ({ searchValue, setSearchValue }) => {
 				className={styles.searchField}
 				value={searchValue}
 				placeholder="Search..."
-				onChange={({ target }) => setSearchValue(target.value)}
+				onChange={({ target }) => dispatch(searchAction(target.value))}
 			/>
 			{searchValue && (
 				<img
@@ -19,7 +23,7 @@ export const Search = ({ searchValue, setSearchValue }) => {
 					height={18}
 					src="/images/delete.svg"
 					alt=""
-					onClick={() => setSearchValue('')}
+					onClick={() => dispatch(searchAction(''))}
 				/>
 			)}
 		</div>
