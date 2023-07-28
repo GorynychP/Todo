@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import styles from './Header.module.scss';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import ACTION_TYPE from '../../actions/actionType';
 
-export const Header = ({ todo, setTodo }) => {
+export const Header = () => {
 	const [post, setPost] = useState('');
-
+	const todo = useSelector(({ todos }) => todos);
+	const dispatch = useDispatch();
 	const handleChange = ({ target }) => {
 		setPost(target.value);
 	};
@@ -34,9 +37,8 @@ export const Header = ({ todo, setTodo }) => {
 					.catch((error) => {
 						console.log('Не удалось отправить данные на сервер', error);
 					});
-				setTodo((prev) => [...prev, newPost]);
+				dispatch({ type: ACTION_TYPE.ADD_TODO, payload: newPost });
 			} else {
-				setTodo((prev) => [...prev]);
 				alert('Задача уже была создана');
 			}
 		} else {
@@ -48,7 +50,7 @@ export const Header = ({ todo, setTodo }) => {
 				.catch((error) => {
 					console.log('Не удалось отправить данные на сервер', error);
 				});
-			setTodo((prev) => [...prev, newPost]);
+			dispatch({ type: ACTION_TYPE.ADD_TODO, payload: newPost });
 		}
 		setPost('');
 	};

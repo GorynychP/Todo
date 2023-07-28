@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
 import styles from './TodoItems.module.scss';
-import { Link } from 'react-router-dom';
-import { AppContext } from '../../context';
+import { Link, useNavigate } from 'react-router-dom';
+import { deleteTodosAsync, setChecketTodosAsync } from '../../actions/async actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const TodoItems = ({ id, title, checked, index }) => {
+	const todos = useSelector(({ todos }) => todos);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const MAX_LENGTH = 20;
 	const truncateText = (text) => {
 		if (text.length <= MAX_LENGTH) {
@@ -13,7 +16,6 @@ export const TodoItems = ({ id, title, checked, index }) => {
 		}
 	};
 
-	const { onTodoChecked, deletePost } = useContext(AppContext);
 	return (
 		<li key={id} id={id} className={checked ? styles.check : ''}>
 			{checked ? (
@@ -21,14 +23,14 @@ export const TodoItems = ({ id, title, checked, index }) => {
 					className={styles.checkbox}
 					src="./images/checked.png"
 					alt="checked"
-					onClick={() => onTodoChecked(id)}
+					onClick={() => dispatch(setChecketTodosAsync(id, todos))}
 				/>
 			) : (
 				<img
 					className={styles.checkbox}
 					src="./images/unchecked.png"
 					alt="unchecked"
-					onClick={() => onTodoChecked(id)}
+					onClick={() => dispatch(setChecketTodosAsync(id, todos))}
 				/>
 			)}
 			<Link to={`/todo/${id}`}>
@@ -43,7 +45,7 @@ export const TodoItems = ({ id, title, checked, index }) => {
 				className={styles.deletePost}
 				src="/images/delete.svg"
 				alt="delete"
-				onClick={() => deletePost(id)}
+				onClick={() => dispatch(deleteTodosAsync(id, navigate))}
 			/>
 		</li>
 	);

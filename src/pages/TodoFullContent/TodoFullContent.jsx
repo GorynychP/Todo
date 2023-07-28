@@ -1,19 +1,20 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './TodoFullContent.module.scss';
 import axios from 'axios';
-import { AppContext } from '../../context';
 import { useDispatch, useSelector } from 'react-redux';
-import { editAction, titleAction, valueAction } from '../../actions';
+import { editAction, titleAction, valueTodoAction } from '../../actions/actionCreators';
+import { deleteTodosAsync } from '../../actions/async actions';
+import ACTION_TYPE from '../../actions/actionType';
 
 export const TodoFullContent = () => {
 	const dispatch = useDispatch();
-	const todoValue = useSelector((state) => state.todoValue);
-	const edit = useSelector((state) => state.edit);
-	const title = useSelector((state) => state.title);
+	const todoValue = useSelector(({ editTodo }) => editTodo.todoValue);
+	const edit = useSelector(({ editTodo }) => editTodo.id);
+	const title = useSelector(({ options }) => options.title);
+	const todos = useSelector(({ todos }) => todos);
 	const navigate = useNavigate();
 	const params = useParams();
-	const { saveTodo, editTodo, deletePost } = useContext(AppContext);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -30,6 +31,31 @@ export const TodoFullContent = () => {
 
 		fetchData();
 	}, [params.id]);
+
+	const editTodo = (id, title) => {
+		dispatch(editAction(id));
+		dispatch(valueTodoAction(title));
+	};
+
+	const saveTodo = (id) => {
+		let newTodo = [...todos].map((item) => {
+			if (item.id === id) {
+				item.title = todoValue;
+				axios
+					.patch(`http://localhost:3004/todos/${id}`, { title: todoValue })
+					.then((response) => {
+						console.log('Данные успешно сохранены', response.data);
+						dispatch(titleAction(todoValue));
+					})
+					.catch((error) => {
+						console.log('Не удалось сохранить данные', error);
+					});
+			}
+			return item;
+		});
+		dispatch({ type: ACTION_TYPE.SET_TODOS, payload: newTodo });
+		dispatch(editAction(null));
+	};
 
 	return (
 		<div className={styles.active}>
@@ -50,14 +76,14 @@ export const TodoFullContent = () => {
 				className={styles.deletePost}
 				src="/images/delete.svg"
 				alt="delete"
-				onClick={() => deletePost(params.id)}
+				onClick={() => dispatch(deleteTodosAsync(params.id, navigate))}
 			/>
 			{edit === params.id ? (
 				<div className={styles.editContainer} key={params.id}>
 					<textarea
 						className={styles.editInput}
 						value={todoValue}
-						onChange={({ target }) => dispatch(valueAction(target.value))}
+						onChange={({ target }) => dispatch(valueTodoAction(target.value))}
 						rows={5}
 					/>
 					<div className={styles.btnContainer}>

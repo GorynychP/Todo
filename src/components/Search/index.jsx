@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './Search.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { searchAction } from '../../actions';
+import { searchAction } from '../../actions/actionCreators';
 
 export const Search = () => {
-	const searchValue = useSelector((state) => state.searchValue);
+	const searchValue = useSelector(({ options }) => options.searchValue);
 	const dispatch = useDispatch();
 	return (
 		<div className={styles.searchBlok}>

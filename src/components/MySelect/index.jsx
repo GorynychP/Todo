@@ -1,14 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './MySelect.module.scss';
-import { AppContext } from '../../context';
+import { useDispatch } from 'react-redux';
+import ACTION_TYPE from '../../actions/actionType';
 
 export const MySelect = ({ options, defaultValue }) => {
 	const [selectedSort, setSelectedSort] = useState('');
-	const { todo, setTodo } = useContext(AppContext);
-
+	const dispatch = useDispatch();
 	const sortTodo = (sort) => {
 		setSelectedSort(sort);
-		setTodo([...todo].sort((a, b) => a[sort].localeCompare(b[sort])));
+		dispatch({ type: ACTION_TYPE.SORTED_TODO, payload: sort });
 	};
 
 	return (
